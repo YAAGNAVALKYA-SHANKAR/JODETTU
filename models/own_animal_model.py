@@ -1,0 +1,11 @@
+from pydantic import BaseModel, Field
+from datetime import datetime
+class OwnAnimalBase(BaseModel):
+    own_animal_type:str=Field(...)
+    own_animal_breed:str=Field(...)
+    own_animal_name:str=Field(...)
+    own_animal_age:int=Field(...)
+    own_animal_height:float=Field(...)
+    own_animal_weight:float=Field(...)
+    own_animal_last_vacc:datetime=Field(...)
+    own_animal_desc:str=Field(...)
