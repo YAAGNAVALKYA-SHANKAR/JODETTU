@@ -24,7 +24,7 @@ class MachineServices:
         ordered_data["images"] = file_data
         await machines.insert_one(ordered_data)
         await machines.update_one({"function": "ID_counter"}, {"$inc": {"count": 1}}, upsert=True)
-        return HTTPException(status_code=200,detail=f"Machine {ordered_data["machine_name"]} added successfully.")
+        return HTTPException(status_code=200,detail=f"Machine {ordered_data['machine_name']} added successfully.")
     
     @staticmethod
     async def list_all_machines():

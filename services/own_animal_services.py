@@ -20,7 +20,7 @@ class OwnAnimalServices:
         ordered_data["images"] = file_data
         await own_animals.insert_one(ordered_data)
         await own_animals.update_one({"function": "ID_counter"}, {"$inc": {"count": 1}}, upsert=True)
-        return HTTPException(status_code=200,detail=f"Animal {ordered_data["own_animal_name"]} added successfully.")
+        return HTTPException(status_code=200,detail=f"Animal {ordered_data['own_animal_name']} added successfully.")
     @staticmethod
     async def list_all_animals():
         exclude_filter={"function":"ID_counter"}
