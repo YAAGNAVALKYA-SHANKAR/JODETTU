@@ -9,8 +9,8 @@ router=APIRouter()
 async def add_new_machine(
     machine_name: str = Form(...),
     machine_brand: str = Form(...),
-    machine_price: str = Form(...),
-    machine_desc: int = Form(...),
+    machine_price: float = Form(...),
+    machine_desc: str = Form(...),
     files: list[UploadFile] = File(...)
 ):
     try:
@@ -24,7 +24,7 @@ async def add_new_machine(
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@router.post("/buy/{machine_name}")
+@router.post("/buy/{machine_id}")
 async def buy_machine(machine_id):
     return await service.buy_machine(machine_id)
 

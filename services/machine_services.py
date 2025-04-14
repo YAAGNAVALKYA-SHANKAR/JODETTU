@@ -1,5 +1,4 @@
 import base64, shutil, os, pandas, csv, io, json
-from datetime import datetime
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 from collections import OrderedDict
@@ -34,12 +33,12 @@ class MachineServices:
         return[{**doc,"_id":str(doc["_id"])}for doc in docs if not all(doc.get(k)==v for k,v in exclude_filter.items())]
     
     @staticmethod
-    async def update_machine(data, machine_name):
-        existing_machine=await machines.find_one({"machine_name":machine_name})
-        if not existing_machine:raise HTTPException(status_code=404, detail=f"Machine {machine_name} not found")
+    async def update_machine(data, machine_id):
+        existing_machine=await machines.find_one({"machine_id":machine_id})
+        if not existing_machine:raise HTTPException(status_code=404, detail=f"Machine {machine_id} not found")
         dict_data=data.model_dump()
-        result=await machines.update_one({"machine_name":machine_name},{"$set":dict_data})
-        if result.modified_count:raise HTTPException(status_code=200,detail=f"Machine {machine_name} updated successfully!")
+        result=await machines.update_one({"machine_name": machine_id},{"$set":dict_data})
+        if result.modified_count:raise HTTPException(status_code=200,detail=f"Machine {machine_id} updated successfully!")
         else:raise HTTPException(status_code=400,detail="No changes detected!")
     @staticmethod
     async def delete_machine(machine_name):

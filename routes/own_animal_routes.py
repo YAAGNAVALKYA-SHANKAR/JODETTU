@@ -1,6 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException
 from services.own_animal_services import OwnAnimalServices
 from models.own_animal_model import OwnAnimalBase
+from datetime import date
 
 service = OwnAnimalServices()
 router = APIRouter()
@@ -12,7 +13,7 @@ async def add_new_animal(
     own_animal_age: int = Form(...),
     own_animal_height: float = Form(...),
     own_animal_weight: float = Form(...),
-    own_animal_last_vacc: str = Form(...),
+    own_animal_last_vacc: date = Form(...),
     own_animal_desc: str = Form(...),
     files: list[UploadFile] = File(...)
 ):
@@ -35,14 +36,17 @@ async def add_new_animal(
 async def list_all_animals():
     return await service.list_all_animals()
 
-@router.put("/update/{own_animal_name}")
-async def update_animal(data:OwnAnimalBase, own_animal_name:str):
-    return await service.update_animal(data, own_animal_name)
+@router.put("/update/{own_animal_id}")
+async def update_animal(data:OwnAnimalBase, own_animal_id:str):
+    return await service.update_animal(data, own_animal_id)
 
-@router.delete("/{animal_name}")
-async def delete_animal(animal_name:str):
-    return await service.delete_animal(animal_name)
+@router.delete("/{animal_id}")
+async def delete_animal(animal_id:str):
+    return await service.delete_animal(animal_id)
 
+@router.get("/{animal_id}")
+async def search_animal(animal_id):
+    return await service.search_animal(animal_id)
 
 @router.post("/import-csv-images/")
 async def import_animals_from_csv(

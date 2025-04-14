@@ -3,7 +3,7 @@ from fastapi import HTTPException
 from collections import OrderedDict
 from general.database import own_animals
 from models.own_animal_model import OwnAnimalBase
-from datetime import datetime
+from datetime import date
 UPLOAD_DIR="upload_files"
 class OwnAnimalServices:
     @staticmethod
@@ -28,20 +28,26 @@ class OwnAnimalServices:
         docs=await doc_cursor.to_list(length=None)
         return[{**doc,"_id":str(doc["_id"])}for doc in docs if not all(doc.get(k)==v for k,v in exclude_filter.items())]
     @staticmethod
-    async def update_animal(data, animal_name):
-        existing_animal=await own_animals.find_one({"own_animal_name":animal_name})
-        if not existing_animal:raise HTTPException(status_code=404, detail=f"Animal {animal_name} not found")
+    async def search_animal(animal_id):
+        existing_animal=await own_animals.find_one({"own_animal_id":animal_id})
+        if not existing_animal:raise HTTPException(status_code=404, detail=f"Animal {animal_id} not found!")
+        else: return OwnAnimalBase(**existing_animal).model_dump()
+
+    @staticmethod
+    async def update_animal(data, animal_id):
+        existing_animal=await own_animals.find_one({"own_animal_id":animal_id})
+        if not existing_animal:raise HTTPException(status_code=404, detail=f"Animal {animal_id} not found")
         dict_data=data.model_dump()
-        result=await own_animals.update_one({"own_animal_name":animal_name},{"$set":dict_data})
-        if result.modified_count:raise HTTPException(status_code=200,detail=f"Animal {animal_name} updated successfully!")
+        result=await own_animals.update_one({"own_animal_id":animal_id},{"$set":dict_data})
+        if result.modified_count:raise HTTPException(status_code=200,detail=f"Animal {animal_id} updated successfully!")
         else:raise HTTPException(status_code=400,detail="No changes detected!")
     @staticmethod
-    async def delete_animal(animal_name):
-        existing_animal=await own_animals.find_one({"own_animal_name":animal_name})
-        if not existing_animal:raise HTTPException(status_code=404,detail=f"Animal {animal_name} not found!")
+    async def delete_animal(animal_id):
+        existing_animal=await own_animals.find_one({"own_animal_id":animal_id})
+        if not existing_animal:raise HTTPException(status_code=404,detail=f"Animal {animal_id} not found!")
         else:
-            own_animals.delete_one({"own_animal_name":animal_name})
-            raise HTTPException(status_code=200,detail=f"Animal {animal_name} deleted successfully!")
+            own_animals.delete_one({"own_animal_id":animal_id})
+            raise HTTPException(status_code=200,detail=f"Animal {animal_id} deleted successfully!")
 
     @staticmethod
     async def import_animals_with_images(csv_file, image_files):
@@ -62,22 +68,19 @@ class OwnAnimalServices:
                     if name in image_lookup:
                         upload_file = image_lookup[name]
 
-                        # Reset file pointer before writing to disk
                         await upload_file.seek(0)
 
                         file_location = f"{UPLOAD_DIR}/{upload_file.filename}"
                         with open(file_location, "wb") as buffer:
                             shutil.copyfileobj(upload_file.file, buffer)
 
-                        # Reset again before storing in DB
                         await upload_file.seek(0)
                         matched_files.append(upload_file)
                     else:
                         raise HTTPException(status_code=400, detail=f"Image {name} not found in upload.")
 
-
                 try:
-                    animal["own_animal_last_vacc"] = datetime.strptime(animal["own_animal_last_vacc"], "%d-%m-%Y").isoformat()
+                    animal["own_animal_last_vacc"] = date(animal["own_animal_last_vacc"]).isoformat()
                     animal_model = OwnAnimalBase(
                         own_animal_type=animal["own_animal_type"],
                         own_animal_breed=animal["own_animal_breed"],
@@ -85,7 +88,7 @@ class OwnAnimalServices:
                         own_animal_age=int(animal["own_animal_age"]),
                         own_animal_height=float(animal["own_animal_height"]),
                         own_animal_weight=float(animal["own_animal_weight"]),
-                        own_animal_last_vacc=datetime.fromisoformat(animal["own_animal_last_vacc"]),
+                        own_animal_last_vacc=date(animal["own_animal_last_vacc"]),
                         own_animal_desc=animal["own_animal_desc"]
                     )
                 except Exception as e:
