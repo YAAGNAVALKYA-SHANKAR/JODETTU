@@ -1,5 +1,5 @@
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException
-from services.own_animal_services import OwnAnimalServices
+from services.animal_services import OwnAnimalServices
 from models.own_animal_model import OwnAnimalBase
 from datetime import date
 

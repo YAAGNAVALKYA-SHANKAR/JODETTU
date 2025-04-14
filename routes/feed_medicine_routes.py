@@ -56,3 +56,28 @@ async def list_all_feed():
 @router.get("/all-medicines")
 async def list_all_medicines():
      return await service.list_medicines()
+
+@router.put("/update-feed/{feed_id}")
+async def update_feed(feed_data:FeedBase,feed_id:str):
+     return await service.update_feed(feed_id, feed_data)
+    
+
+@router.put("/update-medicine/{medicine_id}")
+async def update_medicine(medicine_data:MedicineBase, medicine_id:str):
+     return await service.update_medicine(medicine_id,medicine_data)
+
+@router.delete("/delete-feed/{feed_id}")
+async def delete_feed(feed_id:str):
+     return await service.delete_feed(feed_id)
+    
+@router.delete("/delete-medicine/{medicine_id}")
+async def delete_medicine(medicine_id:str):
+     return await service.delete_medicine(medicine_id)
+
+@router.post("/buy-feed/{feed_id}")
+async def buy_feed(feed_id:str):
+     return await service.buy_feed(feed_id)
+
+@router.post("/buy-medicine/{medicine_id}")
+async def buy_medicine(medicine_id:str):
+     return await service.buy_medicine(medicine_id)

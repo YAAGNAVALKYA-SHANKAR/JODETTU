@@ -3,6 +3,7 @@ from models.feed_model import FeedBase
 from models.medicines_model import MedicineBase
 from datetime import date
 from general.database import feed, medicines
+from services import taxes, discounts
 from collections import OrderedDict
 router = APIRouter()
 class FeedMedicineServices:
@@ -55,3 +56,61 @@ class FeedMedicineServices:
         existing_medicine=await medicines.find_one({"medicine_id":medicine_id})
         if not existing_medicine: raise HTTPException (status_code=404, detail=f"Medicine {medicine_id} not found")
         else: return MedicineBase(**existing_medicine).model_dump()
+
+    @staticmethod
+    async def update_feed(feed_id, feed_data):
+        dict_data=feed_data.model_dump()
+        dict_data["feed_expiry_date"]=dict_data["feed_expiry_date"].isoformat()
+        existing_feed=await feed.find_one({"feed_id":feed_id})
+        if not existing_feed:raise HTTPException (status_code=404, detail=f"Feed {feed_id} not found")
+        else:
+            result=await feed.update_one({"feed_id":feed_id},{"$set":dict_data})
+            if result.modified_count: return HTTPException(status_code=200, detail=f"Feed {feed_id} updated successfully")
+            else: raise HTTPException(status_code=400, detail="No changes detected")
+
+    @staticmethod
+    async def update_medicine(medicine_id, medicine_data):
+        dict_data=medicine_data.model_dump()
+        dict_data["medicine_expiry_data"]=dict_data["medicine_expiry_date"].isoformat()
+        existing_medicine=await medicines.find_one({"medicine_id":medicine_id})
+        if not existing_medicine: raise HTTPException (status_code=404, detail=f"Medicine {medicine_id} not found")
+        else:
+            result=await medicines.update_one({"medicine_id":medicine_id},{"$set":dict_data})
+            if result.modified_count: return HTTPException (status_code=200,detail=f"Medicine {medicine_id} updated successfully")
+            else: raise HTTPException (status_code=400, detail="No changes detected")
+    
+    @staticmethod
+    async def delete_feed(feed_id):
+        existing_feed=await feed.find_one({"feed_id":feed_id})
+        if not existing_feed: raise HTTPException(status_code=404, detail=f"Feed {feed_id} not found")
+        else:
+            feed.delete_one({"feed_id":feed_id})
+            return HTTPException(status_code=200,detail=f"Feed {feed_id} deleted successfully")
+    
+    @staticmethod
+    async def delete_medicine(medicine_id):
+        existing_medicine=await medicines.find_one({"medicine_id":medicine_id})
+        if not existing_medicine: raise HTTPException(status_code=404,detail=f"Medicine {medicine_id} not found")
+        else:
+            medicines.delete_one({"medicine_id":medicine_id})
+            return HTTPException(status_code=200,detail=f"Medicine {medicine_id} deleted successfully")
+        
+    @staticmethod
+    async def buy_feed(feed_id):
+        price = await feed.find_one({"feed_id": feed_id}, {"_id": 0, "feed_id": 1})
+        base_price = price["feed_price"]
+        tax = await taxes.TaxCalculator.calculate_taxes(price)
+        discount = await discounts.Discount.discount_calculator(price)
+        final_price = (base_price+tax)-discount 
+        price_data = {"base_price": base_price,"tax": tax,"discount": discount,"final_price": final_price}
+        return (price_data)
+    
+    @staticmethod
+    async def buy_medicine(medicine_id):
+        price = await medicines.find_one({"medicine_id": medicine_id}, {"_id": 0, "medicine_price": 1})
+        base_price = price["medicine_price"]
+        tax = await taxes.TaxCalculator.calculate_taxes(price)
+        discount = await discounts.Discount.discount_calculator(price)
+        final_price = (base_price+tax)-discount 
+        price_data = {"base_price": base_price,"tax": tax,"discount": discount,"final_price": final_price}
+        return (price_data)
