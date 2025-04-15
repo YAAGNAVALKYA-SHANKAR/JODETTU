@@ -9,3 +9,6 @@ class OwnAnimalBase(BaseModel):
     own_animal_weight:float=Field(...)
     own_animal_last_vacc:date=Field(...)
     own_animal_desc:str=Field(...)
+class LocationBase(BaseModel):
+    latitude:float=Field(...)
+    longitude:float=Field(...)
