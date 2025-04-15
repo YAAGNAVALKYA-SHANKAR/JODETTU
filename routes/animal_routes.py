@@ -27,7 +27,7 @@ async def add_new_animal(
             own_animal_desc=own_animal_desc)
         return await service.add_new_animal(animal_data,files)
     except Exception as e:raise HTTPException(status_code=400,detail=str(e))    
-@router.get("get/all_animals")
+@router.get("/all-animals")
 async def list_all_animals():return await service.list_all_animals()
 @router.put("/update/{own_animal_id}")
 async def update_animal(data:OwnAnimalBase,own_animal_id:str):return await service.update_animal(data,own_animal_id)
