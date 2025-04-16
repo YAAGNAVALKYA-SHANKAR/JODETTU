@@ -44,5 +44,9 @@ async def sell_animal(animal_id:str,market_price:float=Form(...),latitude:str=Fo
     return await service.sell_animals(animal_id,market_price,location)
 @router.get("/market-animals")
 async def all_market_animals():return await service.list_all_market_animals()
+
+@router.get("/market-animal/search")
+async def search_market_animal(animal_id:str):return await service.search_market_animal(animal_id)
+
 @router.post("/buy-animal/{animal_id}")
 async def buy_animal(animal_id:str):return await service.buy_animal(animal_id)

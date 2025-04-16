@@ -122,6 +122,13 @@ class OwnAnimalServices:
         docs=await doc_cursor.to_list(length=None)
         return[{**doc,"_id":str(doc["_id"])}for doc in docs if not all(doc.get(k)==v for k,v in exclude_filter.items())]
     @staticmethod
+    async def search_market_animal(animal_id):
+        existing_animal=await market_animals.find_one({"market_animal_id":animal_id})
+        if not existing_animal:raise HTTPException(status_code=404,detail=f"Animal {animal_id} not found")
+        else:
+            existing_animal["_id"] = str(existing_animal["_id"])
+            return existing_animal
+    @staticmethod
     async def buy_animal(animal_id):
         existing_animal=await market_animals.find_one({"market_animal_id":animal_id})
         if not existing_animal:raise HTTPException(status_code=404,detail=f"Animal {animal_id} not found")
