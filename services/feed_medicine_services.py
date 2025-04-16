@@ -11,7 +11,7 @@ class FeedMedicineServices:
         dict_data=feed_data.model_dump()
         dict_data["feed_expiry_date"]=dict_data["feed_expiry_date"].isoformat()
         counter_doc=await feed_medicines.find_one({"function":"ID_counter"})
-        counter_value=counter_doc["count"] if counter_doc else 1
+        counter_value=counter_doc["feed_count"] if counter_doc else 1
         feed_id=f"FEED_{counter_value:02d}"
         ordered_data=OrderedDict([("id",feed_id),*dict_data.items()])
         await feed_medicines.insert_one(ordered_data)
@@ -22,7 +22,7 @@ class FeedMedicineServices:
         dict_data=medicine_data.model_dump()
         dict_data["medicine_expiry_date"]=dict_data["medicine_expiry_date"].isoformat()
         counter_doc=await feed_medicines.find_one({"function":"ID_counter"})
-        counter_value=counter_doc["count"]if counter_doc else 1
+        counter_value=counter_doc["med_count"]if counter_doc else 1
         medicine_id=f"MED_{counter_value:02d}"
         ordered_data=OrderedDict([("id",medicine_id),*dict_data.items()])
         await feed_medicines.insert_one(ordered_data)
