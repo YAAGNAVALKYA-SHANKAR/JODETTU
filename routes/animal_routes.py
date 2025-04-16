@@ -1,3 +1,4 @@
+import json
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException
 from services.animal_services import OwnAnimalServices
 from models.animal_model import OwnAnimalBase, LocationBase
@@ -38,6 +39,8 @@ async def search_animal(animal_id):return await service.search_animal(animal_id)
 @router.post("/import-csv-images/")
 async def import_animals_from_csv(csv_file:UploadFile=File(...),image_files:list[UploadFile]=File(...)):return await service.import_animals_with_images(csv_file,image_files)
 @router.post("/sell-animal/{animal_id}")
-async def sell_animal(location:LocationBase,animal_id:str,market_price:float=Form(...)):return await service.sell_animals(animal_id,market_price,location)
+async def sell_animal(animal_id:str,market_price:float=Form(...),latitude:str=Form(...),longitude:str=Form(...)):
+    location={"latitude":latitude,"longitude":longitude}
+    return await service.sell_animals(animal_id,market_price,location)
 @router.get("/market-animals")
 async def all_market_animals():return await service.list_all_market_animals()

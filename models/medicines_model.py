@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel,Field
 from datetime import date
 class MedicineBase(BaseModel):
     medicine_name:str=Field(...)

@@ -4,7 +4,7 @@ from collections import OrderedDict
 from general.database import own_animals, market_animals
 from models.animal_model import OwnAnimalBase
 from datetime import date
-from services import taxes,discounts,convenience_fees
+from services import taxes,discounts,convenience_fees,vaccinations
 UPLOAD_DIR="upload_files"
 class OwnAnimalServices:
     @staticmethod
@@ -25,10 +25,17 @@ class OwnAnimalServices:
         return HTTPException(status_code=200,detail=f"Animal {ordered_data['own_animal_name']} added successfully.")
     @staticmethod
     async def list_all_animals():
-        exclude_filter={"function":"ID_counter"}
-        doc_cursor=own_animals.find()
-        docs=await doc_cursor.to_list(length=None)
-        return[{**doc,"_id":str(doc["_id"])}for doc in docs if not all(doc.get(k)==v for k,v in exclude_filter.items())]
+        exclude_filter = {"function": "ID_counter"}
+        doc_cursor = own_animals.find()
+        docs = await doc_cursor.to_list(length=None)
+        updated_docs = []
+        for doc in docs:
+            if all(doc.get(k) == v for k, v in exclude_filter.items()):
+                continue
+            updated_doc = vaccinations.VaccinationHelper.process_animal_vaccinations(doc)
+            updated_doc["_id"] = str(doc["_id"])
+            updated_docs.append(updated_doc)
+        return updated_docs
     @staticmethod
     async def search_animal(animal_id):
         existing_animal=await own_animals.find_one({"own_animal_id":animal_id})
@@ -99,13 +106,15 @@ class OwnAnimalServices:
             if already_on_market: raise HTTPException(status_code=400,detail=f"Animal {animal_id} is already on the market")
             else:
                 existing_animal.pop("own_animal_id",None)
+                existing_animal.pop("_id",None)
                 ordered_data=OrderedDict([
                     ("market_animal_id",market_animal_id),
                     ("market_price",market_price), 
                     *existing_animal.items(),
-                    "location",location],)
+                    ("location",location)],)
                 await market_animals.insert_one(ordered_data)
                 await market_animals.update_one({"function":"ID_counter"},{"$inc":{"count": 1}},upsert=True)
+                return HTTPException(status_code=200,detail=f"Animal {animal_id} added to the market successfully")
     @staticmethod
     async def list_all_market_animals():
         exclude_filter={"function":"ID_counter"}

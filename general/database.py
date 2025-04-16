@@ -9,15 +9,15 @@ DATABASE=os.getenv("ANIMAL_DATABASE")
 OWN_ANIMALS=os.getenv("OWN_ANIMALS")
 MARKET_ANIMALS=os.getenv("MARKET_ANIMALS")
 MACHINES=os.getenv("MACHINES")
-FEED=os.getenv("FEED")
-MEDICINES=os.getenv("MEDICINES")
+FEED_MEDICINES=os.getenv("FEED_MEDICINES")
+
 client=AsyncIOMotorClient(MONGO_URI)
 db=client[DATABASE]
 own_animals=db[OWN_ANIMALS]
 market_animals=db[MARKET_ANIMALS]
 machines=db[MACHINES]
-feed=db[FEED]
-medicines=db[MEDICINES]
+feed_medicines=db[FEED_MEDICINES]
+
 async def init_db():
     UPLOAD_DIR="upload_files"
     os.makedirs(UPLOAD_DIR,exist_ok=True)
@@ -29,10 +29,8 @@ async def init_db():
     await create_collection_with_counter(OWN_ANIMALS)
     await create_collection_with_counter(MARKET_ANIMALS)
     await create_collection_with_counter(MACHINES)
-    await create_collection_with_counter(FEED)
-    await create_collection_with_counter(MEDICINES)
+    await create_collection_with_counter(FEED_MEDICINES)
     await own_animals.create_index([("own_animal_id",ASCENDING)],unique=True)
     await market_animals.create_index([("market_animal_id",ASCENDING)],unique=True)
     await machines.create_index([("machine_id",ASCENDING)],unique=True)
-    await feed.create_index([("feed_id", ASCENDING)],unique=True)
-    await medicines.create_index([("medicine_id", ASCENDING)],unique=True)
+    await feed_medicines.create_index([("id", ASCENDING)],unique=True)
