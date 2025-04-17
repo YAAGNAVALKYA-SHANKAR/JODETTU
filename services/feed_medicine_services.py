@@ -52,7 +52,9 @@ class FeedMedicineServices:
     async def search_product(id):
         existing_product=await feed_medicines.find_one({"id":id})
         if not existing_product:raise HTTPException(status_code=404,detail=f"Product {id} not found")
-        else:return ProductBase(**existing_product).model_dump()
+        else:
+            existing_product["_id"] = str(existing_product["_id"])
+            return existing_product
     @staticmethod
     async def update_feed(feed_id,feed_data):
         dict_data=feed_data.model_dump()
