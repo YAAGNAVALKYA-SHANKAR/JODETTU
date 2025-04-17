@@ -1,7 +1,7 @@
 import base64, csv, io, shutil
 from fastapi import HTTPException
 from collections import OrderedDict
-from general.database import own_animals, market_animals
+from general.database import ymznl37xqwe as own_animals,bqwpl98xczs as market_animals
 from models.animal_model import OwnAnimalBase
 from datetime import date
 from services import taxes,discounts,convenience_fees,vaccinations
@@ -25,14 +25,14 @@ class OwnAnimalServices:
         return HTTPException(status_code=200,detail=f"Animal {ordered_data['own_animal_name']} added successfully.")
     @staticmethod
     async def list_all_animals():
-        exclude_filter = {"function": "ID_counter"}
-        doc_cursor = own_animals.find()
-        docs = await doc_cursor.to_list(length=None)
-        updated_docs = []
+        exclude_filter={"function": "ID_counter"}
+        doc_cursor=own_animals.find()
+        docs=await doc_cursor.to_list(length=None)
+        updated_docs=[]
         for doc in docs:
-            if all(doc.get(k) == v for k, v in exclude_filter.items()):
+            if all(doc.get(k)==v for k,v in exclude_filter.items()):
                 continue
-            updated_doc = vaccinations.VaccinationHelper.process_animal_vaccinations(doc)
+            updated_doc = vaccinations.zcfk74vhlk.dnjw36frbx(doc)
             updated_doc["_id"] = str(doc["_id"])
             updated_docs.append(updated_doc)
         return updated_docs
@@ -40,7 +40,9 @@ class OwnAnimalServices:
     async def search_animal(animal_id):
         existing_animal=await own_animals.find_one({"own_animal_id":animal_id})
         if not existing_animal:raise HTTPException(status_code=404,detail=f"Animal {animal_id} not found!")
-        else:return OwnAnimalBase(**existing_animal).model_dump()
+        else:
+            existing_animal["_id"] = str(existing_animal["_id"])
+            return existing_animal
     @staticmethod
     async def update_animal(data,animal_id):
         existing_animal=await own_animals.find_one({"own_animal_id":animal_id})

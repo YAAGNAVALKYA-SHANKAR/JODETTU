@@ -1,4 +1,3 @@
-import json
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException
 from services.animal_services import OwnAnimalServices
 from models.animal_model import OwnAnimalBase
