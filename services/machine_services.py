@@ -78,6 +78,12 @@ class MachineServices:
                 inserted+=1
             return {"message":f"Successfully imported {inserted} machines."}
         except Exception as e:raise HTTPException(status_code=500,detail=str(e))
+
+    @staticmethod
+    async def search_machine(id):
+        existing_product=await machines.find_one({"machine_id":id})
+        if not existing_product:raise HTTPException(status_code=404,detail=f"Machine {id} not found")
+        else:return MachineBase(**existing_product).model_dump()
     @staticmethod
     async def buy_machine(machine_id):
         price=await machines.find_one({"machine_id":machine_id},{"_id": 0,"machine_price":1})

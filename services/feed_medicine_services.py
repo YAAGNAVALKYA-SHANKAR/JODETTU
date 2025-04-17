@@ -82,7 +82,7 @@ class FeedMedicineServices:
             return HTTPException(status_code=200,detail=f"Product {product_id} deleted successfully")
     @staticmethod
     async def buy_feed(feed_id):
-        price=await feed_medicines.find_one({"id":feed_id},{"_id":0,"feed_price":1})
+        price=await feed_medicines.find_one({"id":feed_id},{"_id":0,"price":1})
         base_price=price["price"]
         tax=await taxes.TaxCalculator.calculate_taxes(price)
         discount=await discounts.Discount.discount_calculator(price)
@@ -92,7 +92,7 @@ class FeedMedicineServices:
         return (price_data)    
     @staticmethod
     async def buy_medicine(medicine_id):
-        price=await feed_medicines.find_one({"id":medicine_id},{"_id": 0,"medicine_price":1})
+        price=await feed_medicines.find_one({"id":medicine_id},{"_id": 0,"price":1})
         base_price=price["price"]
         tax=await taxes.TaxCalculator.calculate_taxes(price)
         discount=await discounts.Discount.discount_calculator(price)

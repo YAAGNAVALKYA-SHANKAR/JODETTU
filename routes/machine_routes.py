@@ -28,3 +28,5 @@ async def update_machine(data:MachineBase,machine_name:str):return await service
 async def delete_machine(machine_name):return await delete_machine(machine_name)
 @router.post("bulk-upload")
 async def bulk_upload(csv_file:UploadFile=File(...),files:list[UploadFile]=File(...)):return await service.bulk_import_machines(csv_file,files)
+@router.get("/search/{machine_id}")
+async def search_machine(machine_id:str):return await service.search_machine(machine_id)
