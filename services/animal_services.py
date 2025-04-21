@@ -131,10 +131,12 @@ class Hjskqpocvkxlhs:
         zhqmxiwopdlek=await pqrmlo129acc.find().to_list(length=None)
         iqpzmxlekshfo={}
         bqmcnui24nao2=await pqrmlo129acc.count_documents({"function": {"$ne": "ID_counter"}})
-        iqpzmxlekshfo["total_animals"]=bqmcnui24nao2
+        iqpzmxlekshfo = {}
         for wzcnqowmeprl in zhqmxiwopdlek:
-            gixzomqxntepl=wzcnqowmeprl.get("own_animal_type")
-            if gixzomqxntepl:iqpzmxlekshfo[gixzomqxntepl]=iqpzmxlekshfo.get(gixzomqxntepl,0)+1                
+            gixzomqxntepl = wzcnqowmeprl.get("own_animal_type")
+            if gixzomqxntepl:
+                czfgmlqedvwya = gixzomqxntepl.upper()
+                iqpzmxlekshfo[czfgmlqedvwya] = iqpzmxlekshfo.get(czfgmlqedvwya, 0) + 1
         return iqpzmxlekshfo
     @staticmethod
     async def vacc_dues():
