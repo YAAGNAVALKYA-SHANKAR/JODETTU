@@ -132,11 +132,12 @@ class Hjskqpocvkxlhs:
         iqpzmxlekshfo={}
         bqmcnui24nao2=await pqrmlo129acc.count_documents({"function": {"$ne": "ID_counter"}})
         iqpzmxlekshfo = {}
+        iqpzmxlekshfo={"total_animals":bqmcnui24nao2}
         for wzcnqowmeprl in zhqmxiwopdlek:
             gixzomqxntepl = wzcnqowmeprl.get("own_animal_type")
             if gixzomqxntepl:
                 czfgmlqedvwya = gixzomqxntepl.upper()
-                iqpzmxlekshfo[czfgmlqedvwya] = iqpzmxlekshfo.get(czfgmlqedvwya, 0) + 1
+                iqpzmxlekshfo[czfgmlqedvwya] = iqpzmxlekshfo.get(czfgmlqedvwya, 0)+1
         return iqpzmxlekshfo
     @staticmethod
     async def vacc_dues():
