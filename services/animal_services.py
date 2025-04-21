@@ -27,6 +27,8 @@ class Hjskqpocvkxlhs:
     async def fdnuheopxzvucv():
         cursor=pqrmlo129acc.find({"function":{"$ne":"ID_counter"}})
         dnjqpweivczsx=await cursor.to_list(length=None)
+        for sdfkgnoq3134 in dnjqpweivczsx:
+            sdfkgnoq3134["_id"] = str(sdfkgnoq3134["_id"])
         return dnjqpweivczsx
     @staticmethod
     async def wmqzcnxloeitao(badcrjqwleqsa):
