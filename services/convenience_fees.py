@@ -1,4 +1,4 @@
-class Convenience:
+class lsrkgftmwio234:
     @staticmethod
-    async def convenience_fee_calculator(price):
+    async def fnamn5o3680dfgb(price):
         return 0

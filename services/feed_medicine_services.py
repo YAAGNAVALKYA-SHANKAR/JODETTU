@@ -1,142 +1,139 @@
-import base64,csv,shutil,io
-from fastapi import HTTPException,APIRouter
-from collections import OrderedDict
-from datetime import date
-from models.product_model import ProductBase
-from general.database import foeqw56lrmv as feed_medicines
-from services import taxes, discounts, convenience_fees
-UPLOAD_DIR="upload_files"
-router = APIRouter()
-class FeedMedicineServices:
+import base64 as e3r45y3srh54,csv as wh4terdfhb564u,shutil as q354grre54h,io as terhbfzseh54g5fc
+from fastapi import HTTPException as aergesq54n6l452
+from collections import OrderedDict as eolg5i62j4rthd
+from datetime import datetime as lejgnep6453j
+from models.product_model import leotkh0dknbp245kmm
+from general.database import foeqw56lrmv
+from services import taxes as aewzmv19tax,discounts as qweixx87cut,convenience_fees as xzmlls10conv
+BCZMZAHFUP="upload_files"
+class slmfgnoei379lskvn:
     @staticmethod
-    async def add_new_feed(feed_data,files):        
-        dict_data=feed_data.model_dump()
-        dict_data["expiry_date"]=dict_data["expiry_date"].isoformat()
-        counter_doc=await feed_medicines.find_one({"function":"ID_counter"})
-        counter_value=counter_doc["feed_count"] if counter_doc else 1
-        feed_id=f"FEED_{counter_value:02d}"
-        ordered_data=OrderedDict([("id",feed_id),*dict_data.items()])
-        file_data=[]
-        for file in files:
-            file_content=await file.read()
-            base64_string=base64.b64encode(file_content).decode("utf-8")
-            file_data.append({"filename":file.filename,"data":base64_string})
-        ordered_data["images"]=file_data
-        await feed_medicines.insert_one(ordered_data)
-        await feed_medicines.update_one({"function":"ID_counter"},{"$inc":{"feed_count": 1}},upsert=True)
-        return HTTPException(status_code=200,detail="Feed added successfully!")        
+    async def ldfkjnat0jgt(edfhgrthj,rthdtfghbyt):        
+        srotmtrwih8790djv=edfhgrthj.model_dump()
+        srotmtrwih8790djv["expiry_date"]=srotmtrwih8790djv["expiry_date"].isoformat()
+        skdjrhbt684jai=await foeqw56lrmv.find_one({"function":"ID_counter"})
+        counter_value=skdjrhbt684jai["feed_count"]if skdjrhbt684jai else 1
+        du587dyth45y=f"FEED_{counter_value:02d}"
+        tk647jnestyj63=eolg5i62j4rthd([("id",du587dyth45y),*srotmtrwih8790djv.items()])
+        tumd674tyhju=[]
+        for skldjgtnrtepg in rthdtfghbyt:
+            treh564henfgsb=await skldjgtnrtepg.read()
+            tmuyfghv456aerdgv=e3r45y3srh54.b64encode(treh564henfgsb).decode("utf-8")
+            tumd674tyhju.append({"filename":skldjgtnrtepg.filename,"data":tmuyfghv456aerdgv})
+        tk647jnestyj63["images"]=tumd674tyhju
+        await foeqw56lrmv.insert_one(tk647jnestyj63)
+        await foeqw56lrmv.update_one({"function":"ID_counter"},{"$inc":{"feed_count":1}},upsert=True)
+        return aergesq54n6l452(status_code=200,detail="Feed added successfully!")        
     @staticmethod   
-    async def add_new_medicine(medicine_data,files):
-        dict_data=medicine_data.model_dump()
-        dict_data["expiry_date"]=dict_data["expiry_date"].isoformat()
-        counter_doc=await feed_medicines.find_one({"function":"ID_counter"})
-        counter_value=counter_doc["med_count"]if counter_doc else 1
-        medicine_id=f"MED_{counter_value:02d}"
-        ordered_data=OrderedDict([("id",medicine_id),*dict_data.items()])
-        file_data=[]
-        for file in files:
-            file_content=await file.read()
-            base64_string=base64.b64encode(file_content).decode("utf-8")
-            file_data.append({"filename":file.filename,"data":base64_string})
-        ordered_data["images"]=file_data
-        await feed_medicines.insert_one(ordered_data)
-        await feed_medicines.update_one({"function":"ID_counter"},{"$inc":{"med_count":1}},upsert=True)
-        return HTTPException(status_code=200,detail="Medicine added successfully!")        
+    async def aeedrthq45232WESF(wrtw34sfnsa363,sfy42g5va):
+        srotmtrwih8790djv=wrtw34sfnsa363.model_dump()
+        srotmtrwih8790djv["expiry_date"]=srotmtrwih8790djv["expiry_date"].isoformat()
+        rdutksefdsg342t5sfh=await foeqw56lrmv.find_one({"function":"ID_counter"})
+        stryjnsrty6534h=rdutksefdsg342t5sfh["med_count"]if rdutksefdsg342t5sfh else 1
+        syhjte52455ega=f"MED_{stryjnsrty6534h:02d}"
+        stynrt53rtbfdw=eolg5i62j4rthd([("id",syhjte52455ega),*srotmtrwih8790djv.items()])
+        styntmyd534e3rag=[]
+        for dtumgsf3451 in sfy42g5va:
+            file_content=await dtumgsf3451.read()
+            dnty563w2dfvvvf=e3r45y3srh54.b64encode(file_content).decode("utf-8")
+            styntmyd534e3rag.append({"filename":dtumgsf3451.filename,"data":dnty563w2dfvvvf})
+        stynrt53rtbfdw["images"]=styntmyd534e3rag
+        await foeqw56lrmv.insert_one(stynrt53rtbfdw)
+        await foeqw56lrmv.update_one({"function":"ID_counter"},{"$inc":{"med_count":1}},upsert=True)
+        return aergesq54n6l452(status_code=200,detail="Medicine added successfully!")        
     @staticmethod 
-    async def list_feed_medicines():
-        exclude_filter={"function":"ID_counter"}
-        doc_cursor=feed_medicines.find()
-        docs=await doc_cursor.to_list(length=None)
-        return[{**doc,"_id":str(doc["_id"])}for doc in docs if not all(doc.get(k)==v for k,v in exclude_filter.items())]
+    async def rsyjw425trgaewh():
+        rtujset563wtgbrw={"function":"ID_counter"}
+        syjw542erga=foeqw56lrmv.find()
+        tnry35cwdvrwt=await syjw542erga.to_list(length=None)
+        return[{**temh245q,"_id":str(temh245q["_id"])}for temh245q in tnry35cwdvrwt if not all(temh245q.get(ryutdver3531)==wbrtw3w2g for ryutdver3531,wbrtw3w2g in rtujset563wtgbrw.items())]
     @staticmethod
-    async def search_product(id):
-        existing_product=await feed_medicines.find_one({"id":id})
-        if not existing_product:raise HTTPException(status_code=404,detail=f"Product {id} not found")
+    async def aeth45sfgshr63w3(qrth5246refa):
+        uynreddfvwr5624=await foeqw56lrmv.find_one({"id":qrth5246refa})
+        if not uynreddfvwr5624:raise aergesq54n6l452(status_code=404,detail=f"Product {qrth5246refa} not found")
+        else:uynreddfvwr5624["_id"]=str(uynreddfvwr5624["_id"])
+        return uynreddfvwr5624
+    @staticmethod
+    async def shstgsvb4256sw452(etyns3524reaqgqq32,rthgns234wCD):
+        srotmtrwih8790djv=rthgns234wCD.model_dump()
+        srotmtrwih8790djv["expiry_date"]=srotmtrwih8790djv["expiry_date"].isoformat()
+        srjyrty2345dfsg=await foeqw56lrmv.find_one({"id":etyns3524reaqgqq32})
+        if not srjyrty2345dfsg:raise aergesq54n6l452 (status_code=404,detail=f"Feed {etyns3524reaqgqq32} not found")
         else:
-            existing_product["_id"] = str(existing_product["_id"])
-            return existing_product
+            tmyfhjg4356agzrfg=await foeqw56lrmv.update_one({"id":etyns3524reaqgqq32},{"$set":srotmtrwih8790djv})
+            if tmyfhjg4356agzrfg.modified_count:return aergesq54n6l452(status_code=200,detail=f"Feed {etyns3524reaqgqq32} updated successfully")
+            else:raise aergesq54n6l452(status_code=400,detail="No changes detected")
     @staticmethod
-    async def update_feed(feed_id,feed_data):
-        dict_data=feed_data.model_dump()
-        dict_data["expiry_date"]=dict_data["expiry_date"].isoformat()
-        existing_feed=await feed_medicines.find_one({"id":feed_id})
-        if not existing_feed:raise HTTPException (status_code=404,detail=f"Feed {feed_id} not found")
+    async def gyhjnsxtry454eagrf(etygjfw54257rfrga, jtdgaefvAera64):
+        srotmtrwih8790djv=jtdgaefvAera64.model_dump()
+        srotmtrwih8790djv["expiry_data"]=srotmtrwih8790djv["expiry_date"].isoformat()
+        tumilt35rtahki=await foeqw56lrmv.find_one({"id":etygjfw54257rfrga})
+        if not tumilt35rtahki:raise aergesq54n6l452 (status_code=404,detail=f"Medicine {etygjfw54257rfrga} not found")
         else:
-            result=await feed_medicines.update_one({"id":feed_id},{"$set":dict_data})
-            if result.modified_count:return HTTPException(status_code=200,detail=f"Feed {feed_id} updated successfully")
-            else:raise HTTPException(status_code=400,detail="No changes detected")
+            tujhkmf4536hgyaz=await foeqw56lrmv.update_one({"id":etygjfw54257rfrga},{"$set":srotmtrwih8790djv})
+            if tujhkmf4536hgyaz.modified_count:return aergesq54n6l452 (status_code=200,detail=f"Medicine {etygjfw54257rfrga} updated successfully")
+            else:raise aergesq54n6l452 (status_code=400,detail="No changes detected")
     @staticmethod
-    async def update_medicine(medicine_id, medicine_data):
-        dict_data=medicine_data.model_dump()
-        dict_data["expiry_data"]=dict_data["expiry_date"].isoformat()
-        existing_medicine=await feed_medicines.find_one({"id":medicine_id})
-        if not existing_medicine:raise HTTPException (status_code=404,detail=f"Medicine {medicine_id} not found")
-        else:
-            result=await feed_medicines.update_one({"id":medicine_id},{"$set":dict_data})
-            if result.modified_count:return HTTPException (status_code=200,detail=f"Medicine {medicine_id} updated successfully")
-            else:raise HTTPException (status_code=400,detail="No changes detected")
+    async def fghmnuyra4542qefav(thgfjysaegr3451):
+        yruierwrfgvbw4564=await foeqw56lrmv.find_one({"id":thgfjysaegr3451})
+        if not yruierwrfgvbw4564:raise aergesq54n6l452(status_code=404,detail=f"Product {thgfjysaegr3451} not found")
+        else:foeqw56lrmv.delete_one({"id":thgfjysaegr3451})
+        return aergesq54n6l452(status_code=200,detail=f"Product {thgfjysaegr3451} deleted successfully")
     @staticmethod
-    async def delete_product(product_id):
-        existing_feed=await feed_medicines.find_one({"id":product_id})
-        if not existing_feed:raise HTTPException(status_code=404,detail=f"Product {product_id} not found")
-        else:
-            feed_medicines.delete_one({"id":product_id})
-            return HTTPException(status_code=200,detail=f"Product {product_id} deleted successfully")
+    async def uytkjdgs536h5b(etjgf425aergt):
+        etnyewrdgv5663=await foeqw56lrmv.find_one({"id":etjgf425aergt},{"_id":0,"price":1})
+        uygk465rse53=etnyewrdgv5663["price"]
+        fyufjcgmf4675=await aewzmv19tax.ewj2kj5jsbnfa.kjadnfu425olh(etnyewrdgv5663)
+        fyujh5576sartb=await qweixx87cut.wsrdfeawpk134.wfrsd6324fa(etnyewrdgv5663)
+        yu567eds5tr=await xzmlls10conv.lsrkgftmwio234.fnamn5o3680dfgb(etnyewrdgv5663)
+        duygjchyu546t6ryhs=(uygk465rse53+fyufjcgmf4675+yu567eds5tr)-fyujh5576sartb 
+        srystke674htyegb={"base_price":uygk465rse53,"tax":fyufjcgmf4675,"discount":fyujh5576sartb,"final_price":duygjchyu546t6ryhs,"convenience_fee":yu567eds5tr}
+        return(srystke674htyegb)    
     @staticmethod
-    async def buy_feed(feed_id):
-        price=await feed_medicines.find_one({"id":feed_id},{"_id":0,"price":1})
-        base_price=price["price"]
-        tax=await taxes.TaxCalculator.calculate_taxes(price)
-        discount=await discounts.Discount.discount_calculator(price)
-        convenience_fee=await convenience_fees.Convenience.convenience_fee_calculator(price)
-        final_price=(base_price+tax+convenience_fee)-discount 
-        price_data={"base_price":base_price,"tax":tax,"discount":discount,"final_price":final_price,"convenience_fee":convenience_fee}
-        return (price_data)    
+    async def wtyrj54rtgdtfhy5(dyruke6754th):
+        etnyewrdgv5663=await foeqw56lrmv.find_one({"id":dyruke6754th},{"_id":0,"price":1})
+        uygk465rse53=etnyewrdgv5663["price"]
+        fyufjcgmf4675=await aewzmv19tax.ewj2kj5jsbnfa.kjadnfu425olh(etnyewrdgv5663)
+        fyujh5576sartb=await qweixx87cut.wsrdfeawpk134.wfrsd6324fa(etnyewrdgv5663)
+        yu567eds5tr=await xzmlls10conv.lsrkgftmwio234.fnamn5o3680dfgb(etnyewrdgv5663)
+        duygjchyu546t6ryhs=(uygk465rse53+fyufjcgmf4675+yu567eds5tr)-fyujh5576sartb 
+        srystke674htyegb={"base_price":uygk465rse53,"tax":fyufjcgmf4675,"discount":fyujh5576sartb,"final_price":duygjchyu546t6ryhs,"convenience_fee":yu567eds5tr}
+        return(srystke674htyegb)
     @staticmethod
-    async def buy_medicine(medicine_id):
-        price=await feed_medicines.find_one({"id":medicine_id},{"_id": 0,"price":1})
-        base_price=price["price"]
-        tax=await taxes.TaxCalculator.calculate_taxes(price)
-        discount=await discounts.Discount.discount_calculator(price)
-        convenience_fee=await convenience_fees.Convenience.convenience_fee_calculator(price)
-        final_price=(base_price+tax+convenience_fee)-discount 
-        price_data={"base_price":base_price,"tax":tax,"discount":discount,"final_price":final_price,"convenience_fee":convenience_fee}
-        return (price_data)
-    @staticmethod
-    async def import_products(csv_file,image_files,product_type):
+    async def ethe4309ufedjnkjet(srthw456rhbt,srwyj456tdhb,tey675rtdfgwhtr):
         try:    
-            csv_bytes=await csv_file.read()
-            csv_text=io.StringIO(csv_bytes.decode("utf-8"), newline="")
-            csv_reader=csv.DictReader(csv_text)
-            product_data=list(csv_reader)
-            image_lookup={file.filename:file for file in image_files}
-            inserted=0
-            for product in product_data:
-                image_filenames=[name.strip() for name in product.get("images", "").split(";")if name.strip()]
-                matched_files=[]
-                for name in image_filenames:
-                    if name in image_lookup:
-                        upload_file=image_lookup[name]
-                        await upload_file.seek(0)
-                        file_location=f"{UPLOAD_DIR}/{upload_file.filename}"
-                        with open(file_location, "wb") as buffer: shutil.copyfileobj(upload_file.file,buffer)
-                        await upload_file.seek(0)
-                        matched_files.append(upload_file)
-                    else: raise HTTPException(status_code=400,detail=f"Image {name} not found in upload.")                
+            etygnw5675ytnj=await srthw456rhbt.read()
+            w5r6jytngdgtvftr=terhbfzseh54g5fc.StringIO(etygnw5675ytnj.decode("utf-8"),newline="")
+            wrgty56ryjtugf=wh4terdfhb564u.DictReader(w5r6jytngdgtvftr)
+            te7ygjnhtw67tyfgcv=list(wrgty56ryjtugf)
+            et5y6gctfvnwyj={w65thdrf65j.filename:w65thdrf65j for w65thdrf65j in srwyj456tdhb}
+            y7ughmeyhgm=0
+            for yumhdgvbetghym in te7ygjnhtw67tyfgcv:
+                yuhgjbmw56rt63=[etyghnvart65j56.strip()for etyghnvart65j56 in yumhdgvbetghym.get("images","").split(";")if etyghnvart65j56.strip()]
+                rmyu5esr5nr5ty6=[]
+                for drymuh5w6tyhb in yuhgjbmw56rt63:
+                    if drymuh5w6tyhb in et5y6gctfvnwyj:
+                        t6uukfnm2q5y=et5y6gctfvnwyj[drymuh5w6tyhb]
+                        await t6uukfnm2q5y.seek(0)
+                        uijke65wrtngq=f"{BCZMZAHFUP}/{t6uukfnm2q5y.filename}"
+                        with open(uijke65wrtngq, "wb") as tey67jwnqa4t:q354grre54h.copyfileobj(t6uukfnm2q5y.file,tey67jwnqa4t)
+                        await t6uukfnm2q5y.seek(0)
+                        rmyu5esr5nr5ty6.append(t6uukfnm2q5y)
+                    else:raise aergesq54n6l452(status_code=400,detail=f"Image {drymuh5w6tyhb} not found in upload.")                
                     try:
-                        product["expiry_date"]=date(product["expiry_date"]).isoformat()
-                        product_model=ProductBase(
-                                name=product["name"],
-                                brand=product["brand"],
-                                composition=product["composition"],
-                                animal=product["animal"],
-                                manufacturer=product["manufacturer"],
-                                price=product["price"],
-                                expiry_date=product["expiry_date"])
-                    except Exception as e:raise HTTPException(status_code=422,detail=f"Invalid data format: {str(e)}")
-                    if product_type=="feed":await FeedMedicineServices.add_new_feed(product_model,matched_files)
-                    elif product_type=="medicines":await FeedMedicineServices.add_new_medicine(product_data,matched_files)
-                    else:raise HTTPException(status_code=400,detail="Invalid type")
-                    inserted+=1
-            return {"message":f"Successfully imported {inserted} animals."}
-        except Exception as e:raise HTTPException(status_code=500,detail=str(e))
+                        yumhdgvbetghym["expiry_date"]=lejgnep6453j(yumhdgvbetghym["expiry_date"]).isoformat()
+                        product_model=leotkh0dknbp245kmm(
+                                name=yumhdgvbetghym["name"],
+                                brand=yumhdgvbetghym["brand"],
+                                composition=yumhdgvbetghym["composition"],
+                                animal=yumhdgvbetghym["animal"],
+                                manufacturer=yumhdgvbetghym["manufacturer"],
+                                price=yumhdgvbetghym["price"],
+                                expiry_date=yumhdgvbetghym["expiry_date"])
+                    except Exception as e:raise aergesq54n6l452(status_code=422,detail=f"Invalid data format: {str(e)}")
+                    if tey675rtdfgwhtr=="feed":await slmfgnoei379lskvn.ldfkjnat0jgt(product_model,rmyu5esr5nr5ty6)
+                    elif tey675rtdfgwhtr=="medicines":await slmfgnoei379lskvn.aeedrthq45232WESF(te7ygjnhtw67tyfgcv,rmyu5esr5nr5ty6)
+                    else:return aergesq54n6l452(status_code=400,detail="Invalid type")
+                    y7ughmeyhgm+=1
+            return {"message":f"Successfully imported {y7ughmeyhgm} animals."}
+        except Exception as e:raise aergesq54n6l452(status_code=500,detail=str(e))
