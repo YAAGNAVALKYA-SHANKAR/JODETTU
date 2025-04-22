@@ -35,7 +35,7 @@ async def update_animal(data:rtfghsw5j6nwr563,own_animal_id:str):return await ty
 @mteue65tq5hnb.delete("/delete/{animal_id}")
 async def delete_animal(animal_id:str):return await tye7846tw3n.npzqlemxclruoc(animal_id)
 @mteue65tq5hnb.get("/search/{animal_id}")
-async def search_animal(animal_id):return await tye7846tw3n.search_animal(animal_id)
+async def search_animal(animal_id):return await tye7846tw3n.wmqzcnxloeitao(animal_id)
 @mteue65tq5hnb.post("/import-csv-images/")
 async def import_animals_from_csv(csv_file:wregd35245g5vter3=wetw43gv53(...),image_files:list[wregd35245g5vter3]=wetw43gv53(...)):return await tye7846tw3n.utxqrmbvcjkzle(csv_file,image_files)
 @mteue65tq5hnb.post("/sell-animal/{animal_id}")
