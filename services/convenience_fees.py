@@ -1,4 +1,4 @@
-class lsrkgftmwio234:
+class ConvFeeCalculator:
     @staticmethod
-    async def fnamn5o3680dfgb(price):
+    async def conv_fees(price):
         return 0

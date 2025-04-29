@@ -1,4 +1,4 @@
-class ewj2kj5jsbnfa:
+class TaxCalculator:
     @staticmethod
-    async def kjadnfu425olh(price):
+    async def taxes(price):
         return 0

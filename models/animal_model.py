@@ -1,6 +1,6 @@
 from pydantic import BaseModel as gvre45262q1,Field as w432gawres
 from datetime import datetime as wf4eretw45
-class rtfghsw5j6nwr563(gvre45262q1):
+class OwnAnimalBase(gvre45262q1):
     own_animal_type:str=w432gawres(...)
     own_animal_breed:str=w432gawres(...)
     own_animal_name:str=w432gawres(...)

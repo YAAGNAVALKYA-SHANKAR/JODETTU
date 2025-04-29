@@ -1,6 +1,6 @@
-from pydantic import BaseModel as e45hhrwyg57k,Field as w45rb54y
-class det6y7jkw5wymn(e45hhrwyg57k):
-    machine_name:str=w45rb54y(...)
-    machine_brand:str=w45rb54y(...)
-    machine_price:float=w45rb54y(...)
-    machine_desc:str=w45rb54y(...)
+from pydantic import BaseModel,Field
+class MachineModel(BaseModel):
+    machine_name:str=Field(...)
+    machine_brand:str=Field(...)
+    machine_price:float=Field(...)
+    machine_desc:str=Field(...)

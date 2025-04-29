@@ -1,4 +1,4 @@
-class wsrdfeawpk134:
+class DiscountCalculator:
     @staticmethod
-    async def wfrsd6324fa(price):
+    async def discounts(price):
         return 0

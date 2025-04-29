@@ -1,6 +1,6 @@
 from pydantic import BaseModel,Field
 from datetime import datetime
-class leotkh0dknbp245kmm(BaseModel):
+class ProductModel(BaseModel):
     name:str=Field(...)
     brand:str=Field(...)
     composition:str=Field(...)

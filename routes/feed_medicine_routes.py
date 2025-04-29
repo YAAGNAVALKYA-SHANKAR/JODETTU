@@ -1,21 +1,21 @@
-from fastapi import HTTPException as aergesq54n6l452,APIRouter,Form as rknnblroibmorl,UploadFile as ksjnrbowtiryh,File as oldkmemf324rnjlokn
-from services.feed_medicine_services import slmfgnoei379lskvn
-from models.product_model import leotkh0dknbp245kmm
-from datetime import datetime as lsjdkfnaeorj
-kjgneougvih=slmfgnoei379lskvn()
-dbrnh04uykjsfnfg=APIRouter()
-@dbrnh04uykjsfnfg.post("/add-feed")
+from fastapi import HTTPException,APIRouter,Form,UploadFile,File
+from services.feed_medicine_services import MarketServices
+from models.product_model import ProductModel
+from datetime import datetime
+service=MarketServices()
+router=APIRouter()
+@router.post("/add-feed")
 async def add_feed(
-    feed_name:str=rknnblroibmorl(...),
-    feed_brand:str=rknnblroibmorl(...),
-    feed_composition:str=rknnblroibmorl(...),
-    feed_animal:str=rknnblroibmorl(...),
-    feed_manufacturer:str=rknnblroibmorl(...),
-    feed_price:float=rknnblroibmorl(...),
-    feed_expiry_date:lsjdkfnaeorj=rknnblroibmorl(...),
-    files:list[ksjnrbowtiryh]=oldkmemf324rnjlokn(...),):
+    feed_name:str=Form(...),
+    feed_brand:str=Form(...),
+    feed_composition:str=Form(...),
+    feed_animal:str=Form(...),
+    feed_manufacturer:str=Form(...),
+    feed_price:float=Form(...),
+    feed_expiry_date:datetime=Form(...),
+    files:list[UploadFile]=File(...),):
     try:
-        aljkfnbvrto9gbvgj=leotkh0dknbp245kmm(
+        product_data=ProductModel(
             name=feed_name,
             brand=feed_brand,
             composition=feed_composition,
@@ -23,20 +23,20 @@ async def add_feed(
             manufacturer=feed_manufacturer,
             price=feed_price,
             expiry_date=feed_expiry_date)
-        return await kjgneougvih.ldfkjnat0jgt(aljkfnbvrto9gbvgj, files)
-    except Exception as e:raise aergesq54n6l452(status_code=400,detail=f"This is the flag raised{e}")        
-@dbrnh04uykjsfnfg.post("/add-medicine")
+        return await service.add_feed(product_data, files)
+    except Exception as e:raise HTTPException(status_code=400,detail=f"This is the flag raised{e}")        
+@router.post("/add-medicine")
 async def add_new_medicine(
-        medicine_name:str=rknnblroibmorl(...),
-        medicine_brand:str=rknnblroibmorl(...),
-        medicine_composition:str=rknnblroibmorl(...),
-        medicine_animal:str=rknnblroibmorl(...),
-        medicine_manufacturer:str=rknnblroibmorl(...),
-        medicine_price:float=rknnblroibmorl(...),
-        medicine_expiry_date:lsjdkfnaeorj=rknnblroibmorl(...),
-        files:list[ksjnrbowtiryh]=oldkmemf324rnjlokn(...),):     
+        medicine_name:str=Form(...),
+        medicine_brand:str=Form(...),
+        medicine_composition:str=Form(...),
+        medicine_animal:str=Form(...),
+        medicine_manufacturer:str=Form(...),
+        medicine_price:float=Form(...),
+        medicine_expiry_date:datetime=Form(...),
+        files:list[UploadFile]=File(...),):     
         try:
-            etyjw5637rwsr=leotkh0dknbp245kmm(
+            product_data=ProductModel(
                 name=medicine_name,
                 brand=medicine_brand,                
                 composition=medicine_composition,
@@ -44,21 +44,21 @@ async def add_new_medicine(
                 manufacturer=medicine_manufacturer,
                 price=medicine_price,
                 expiry_date=medicine_expiry_date)
-            return await kjgneougvih.aeedrthq45232WESF(etyjw5637rwsr,files)
-        except Exception as e:raise aergesq54n6l452(status_code=400,detail=str(e))        
-@dbrnh04uykjsfnfg.get("/all-products")
-async def list_all_products():return await kjgneougvih.rsyjw425trgaewh()
-@dbrnh04uykjsfnfg.put("/update-feed/{feed_id}")
-async def update_feed(feed_data:leotkh0dknbp245kmm,feed_id:str):return await kjgneougvih.shstgsvb4256sw452(feed_id,feed_data)
-@dbrnh04uykjsfnfg.put("/update-medicine/{medicine_id}")
-async def update_medicine(medicine_data:leotkh0dknbp245kmm,medicine_id:str):return await kjgneougvih.gyhjnsxtry454eagrf(medicine_id,medicine_data)
-@dbrnh04uykjsfnfg.delete("/delete-feed/{feed_id}")
-async def delete_product(product_id:str):return await kjgneougvih.fghmnuyra4542qefav(product_id)
-@dbrnh04uykjsfnfg.post("/buy-feed/{feed_id}")
-async def buy_feed(feed_id:str):return await kjgneougvih.uytkjdgs536h5b(feed_id)
-@dbrnh04uykjsfnfg.post("/buy-medicine/{medicine_id}")
-async def buy_medicine(medicine_id:str):return await kjgneougvih.wtyrj54rtgdtfhy5(medicine_id)
-@dbrnh04uykjsfnfg.get("/search/{product_id}")
-async def search_product(product_id:str):return await kjgneougvih.aeth45sfgshr63w3(product_id)
-@dbrnh04uykjsfnfg.post("/import-products")
-async def import_products(erjgeo0848dsjgloi:ksjnrbowtiryh=oldkmemf324rnjlokn(...),reth46674oaenfgrf:list[ksjnrbowtiryh]=oldkmemf324rnjlokn(...)):return await kjgneougvih.ethe4309ufedjnkjet(erjgeo0848dsjgloi,reth46674oaenfgrf)
+            return await service.add_medicine(product_data,files)
+        except Exception as e:raise HTTPException(status_code=400,detail=str(e))        
+@router.get("/all-products")
+async def list_all_products():return await service.list_all_products()
+@router.put("/update-feed/{feed_id}")
+async def update_feed(feed_data:ProductModel,feed_id:str):return await service.update_feed(feed_id,feed_data)
+@router.put("/update-medicine/{medicine_id}")
+async def update_medicine(medicine_data:ProductModel,medicine_id:str):return await service.update_medicine(medicine_id,medicine_data)
+@router.delete("/delete-feed/{feed_id}")
+async def delete_product(product_id:str):return await service.delete_product(product_id)
+@router.post("/buy-feed/{feed_id}")
+async def buy_feed(feed_id:str):return await service.buy_feed(feed_id)
+@router.post("/buy-medicine/{medicine_id}")
+async def buy_medicine(medicine_id:str):return await service.buy_medicine(medicine_id)
+@router.get("/search/{product_id}")
+async def search_product(product_id:str):return await service.search_product(product_id)
+@router.post("/import-products")
+async def import_products(csv_file:UploadFile=File(...),product_images:list[UploadFile]=File(...)):return await service.bulk_import_products(csv_file,product_images)
